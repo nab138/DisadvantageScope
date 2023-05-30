@@ -12,7 +12,6 @@ import { convert } from "../../shared/units";
 import { cleanFloat } from "../../shared/util";
 import ThreeDimensionVisualizer from "../../shared/visualizers/ThreeDimensionVisualizer";
 import TimelineVizController from "./TimelineVizController";
-import termCanvas from "ansi-canvas";
 
 export default class ThreeDimensionController extends TimelineVizController {
   private FIELD: HTMLInputElement;
@@ -27,8 +26,7 @@ export default class ThreeDimensionController extends TimelineVizController {
 
   constructor(content: HTMLElement) {
     let configBody = content.getElementsByClassName("timeline-viz-config")[0].firstElementChild as HTMLElement;
-    let invisCanvas = document.createElement("canvas");
-    invisCanvas.style.display = "none";
+
     super(
       content,
       TabType.ThreeDimension,
@@ -80,7 +78,6 @@ export default class ThreeDimensionController extends TimelineVizController {
       new ThreeDimensionVisualizer(
         content,
         content.getElementsByClassName("three-dimension-canvas")[0] as HTMLCanvasElement,
-        termCanvas(invisCanvas),
         content.getElementsByClassName("three-dimension-alert")[0] as HTMLElement
       )
     );

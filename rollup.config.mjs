@@ -40,6 +40,7 @@ export default (cliArgs) => {
   if (cliArgs.configLargeRenderers === true) return largeRendererBundles;
   if (cliArgs.configSmallRenderers === true) return smallRendererBundles;
   if (cliArgs.configWorkers === true) return workerBundles;
+  if (cliArgs.configHub === true) return largeRendererBundles[0];
 
   return [...mainBundles, ...largeRendererBundles, ...smallRendererBundles, ...workerBundles];
 };

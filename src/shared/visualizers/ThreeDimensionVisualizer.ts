@@ -89,11 +89,9 @@ export default class ThreeDimensionVisualizer implements Visualizer {
   private lastFieldTitle: string = "";
   private lastRobotTitle: string = "";
 
-  constructor(content: HTMLElement, canvas: HTMLCanvasElement, termCanvas: any, alert: HTMLElement) {
+  constructor(content: HTMLElement, canvas: HTMLCanvasElement, alert: HTMLElement) {
     this.content = content;
     this.canvas = canvas;
-    this.termCanvas = termCanvas;
-    this.termContext = termCanvas.getContext("2d", { willReadFrequently: true });
     this.alert = alert;
     this.alertCamera = alert.getElementsByTagName("span")[0];
     this.renderer = new THREE.WebGLRenderer({ canvas, preserveDrawingBuffer: true });
@@ -328,12 +326,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     if (JSON.stringify(command) != JSON.stringify(this.command)) {
       this.shouldRender = true;
     }
-    let image = new Image();
-    image.src = this.renderer.domElement.toDataURL();
-    image.addEventListener("load", () => {
-      this.termContext.drawImage(image, 0, 0, this.termCanvas.width, this.termCanvas.height);
-    });
-    this.termCanvas.render();
+    window.renderToTerm(this.renderer.domElement.toDataURL());
+
     this.command = command;
     return this.lastAspectRatio;
   }

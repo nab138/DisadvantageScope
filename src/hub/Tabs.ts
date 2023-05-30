@@ -298,6 +298,15 @@ export default class Tabs {
     this.updateElements();
   }
 
+  openTabIfNotOpen(type: TabType) {
+    let index = this.tabList.findIndex((tab) => tab.type == type);
+    if (index == -1) {
+      this.addTab(type);
+    } else {
+      this.setSelected(index);
+    }
+  }
+
   /** Moves the specified tab left or right. */
   shift(index: number, shift: number) {
     if (index == 0) return;

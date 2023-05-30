@@ -671,6 +671,7 @@ export default class LineGraphController implements TabController {
     // Initial setup and scaling
     const devicePixelRatio = window.devicePixelRatio;
     let context = this.CANVAS.getContext("2d") as CanvasRenderingContext2D;
+
     let width = this.CANVAS_CONTAINER.clientWidth;
     let height = this.CANVAS_CONTAINER.clientHeight;
     let light = !window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -1098,6 +1099,9 @@ export default class LineGraphController implements TabController {
         }
       });
     });
+    if (window.renderToTerm !== undefined) {
+      window.renderToTerm(this.CANVAS.toDataURL());
+    }
   }
 }
 

@@ -71,7 +71,6 @@ window.addEventListener("message", (event) => {
               visualizer = new ThreeDimensionVisualizer(
                 document.body,
                 document.getElementById("threeDimensionCanvas") as HTMLCanvasElement,
-                null,
                 document.getElementById("threeDimensionAlert") as HTMLElement
               );
               break;

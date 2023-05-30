@@ -48,6 +48,7 @@ import { createExtraFRCDataFolder, loadFRCData } from "./frcDataUtil";
 import StateTracker from "./StateTracker";
 import UpdateChecker from "./UpdateChecker";
 import videoExtensions from "./videoExtensions";
+import readline from "readline";
 
 // Global variables
 let hubWindows: BrowserWindow[] = []; // Ordered by last focus time (recent first)
@@ -81,6 +82,25 @@ let downloadRefreshInterval: NodeJS.Timer | null = null;
 let downloadAddress: string = "";
 let downloadPath: string = "";
 let downloadFileSizeCache: { [id: string]: number } = {};
+
+readline.emitKeypressEvents(process.stdin);
+
+if (process.stdin.isTTY) process.stdin.setRawMode(true);
+
+process.stdin.on("keypress", (chunk, key) => {
+  switch (key.name) {
+    case "1":
+      sendMessage(hubWindows[0], "open-tab", TabType.LineGraph);
+      break;
+    case "2":
+      sendMessage(hubWindows[0], "open-tab", TabType.ThreeDimension);
+      break;
+    case "q":
+      process.exit(0);
+    default:
+      break;
+  }
+});
 
 // WINDOW MESSAGE HANDLING
 

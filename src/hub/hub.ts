@@ -14,6 +14,7 @@ import Selection from "./Selection";
 import Sidebar from "./Sidebar";
 import Tabs from "./Tabs";
 import WorkerManager from "./WorkerManager";
+import term from "ansi-canvas";
 
 // Constants
 const SAVE_PERIOD_MS = 250;
@@ -39,6 +40,7 @@ declare global {
     messagePort: MessagePort | null;
     sendMainMessage: (name: string, data?: any) => void;
     startDrag: (x: number, y: number, offsetX: number, offsetY: number, data: any) => void;
+    renderToTerm: (dataURL: string) => void;
 
     override3dRobotConfig: (title: string, rotations: Config3d_Rotation[], position: [number, number, number]) => void;
   }
@@ -68,6 +70,20 @@ let dragOffsetY = 0;
 let dragLastX = 0;
 let dragLastY = 0;
 let dragData: any = null;
+let invisCanvas = document.createElement("canvas");
+invisCanvas.style.display = "none";
+let termCanvas = term(invisCanvas);
+let termContext = termCanvas.getContext("2d", { willReadFrequently: true });
+
+window.renderToTerm = (dataURL) => {
+  let img = new Image();
+  img.src = dataURL;
+  img.addEventListener("load", () => {
+    termContext.clearRect(0, 0, termCanvas.width, termCanvas.height);
+    termContext.drawImage(img, 0, 0, termCanvas.width, termCanvas.height);
+    termCanvas.render();
+  });
+};
 
 // WINDOW UTILITIES
 
@@ -454,6 +470,9 @@ function handleMainMessage(message: NamedMessage) {
 
     case "new-tab":
       window.tabs.addTab(message.data);
+      break;
+    case "open-tab":
+      window.tabs.openTabIfNotOpen(message.data);
       break;
 
     case "move-tab":

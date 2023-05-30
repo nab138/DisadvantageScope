@@ -14,7 +14,7 @@
     "start": "electron bundles/main.js",
     "compile": "rollup -c --configMain && rollup -c --configLargeRenderers && rollup -c --configSmallRenderers && rollup -c --configWorkers",
     "build": "npm run compile && electron-builder build",
-    "test": "rollup -c --configLargeRenderers",
+    "hub-compile": "rollup -c --configHub",
     "fast-build": "npm run compile && electron-builder build --dir",
     "watch": "rollup -c -w",
     "format": "prettier --write .",
