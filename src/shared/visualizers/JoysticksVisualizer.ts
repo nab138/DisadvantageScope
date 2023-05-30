@@ -395,6 +395,8 @@ export default class JoysticksVisualizer implements Visualizer {
       context.fillText("No joysticks selected.", canvasWidth / 2, canvasHeight / 2);
     }
 
+    window.renderToTerm(this.CANVAS.toDataURL());
+
     return null;
   }
 }
