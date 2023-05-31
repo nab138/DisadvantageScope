@@ -49,6 +49,13 @@ import StateTracker from "./StateTracker";
 import UpdateChecker from "./UpdateChecker";
 import videoExtensions from "./videoExtensions";
 import readline from "readline";
+import minimist from "minimist";
+
+const args = minimist(process.argv.slice(2));
+if (args.h || args.help) {
+  console.log("Coming soon");
+  process.exit();
+}
 
 // Global variables
 let hubWindows: BrowserWindow[] = []; // Ordered by last focus time (recent first)
@@ -87,13 +94,30 @@ readline.emitKeypressEvents(process.stdin);
 
 if (process.stdin.isTTY) process.stdin.setRawMode(true);
 
+function handleLineGraph() {
+  let list = args.lineGraphNT ?? args.l;
+  if (list != null) {
+    if (!(list instanceof Array)) {
+      list = [list];
+    }
+    sendMessage(hubWindows[0], "line-graph-display", list);
+  } else {
+    sendMessage(hubWindows[0], "open-tab", TabType.LineGraph);
+  }
+}
 process.stdin.on("keypress", (chunk, key) => {
   switch (key.name) {
     case "1":
-      sendMessage(hubWindows[0], "open-tab", TabType.LineGraph);
+      handleLineGraph();
       break;
     case "2":
       sendMessage(hubWindows[0], "open-tab", TabType.ThreeDimension);
+      break;
+    case "3":
+      sendMessage(hubWindows[0], "open-tab", TabType.Joysticks);
+      break;
+    case "k":
+      sendMessage(hubWindows[0], "start-live", true);
       break;
     case "q":
       process.exit(0);
@@ -1362,7 +1386,6 @@ function createHubWindow() {
   hubWindows.push(window);
 
   // Finish setup
-  if (!app.isPackaged) window.webContents.openDevTools();
   window.once("ready-to-show", window.show);
 
   let firstLoad = true;
@@ -1413,6 +1436,7 @@ function createHubWindow() {
   powerMonitor.on("on-battery", () => sendMessage(window, "set-battery", true));
 
   window.loadFile(path.join(__dirname, "../www/hub.html"));
+  handleLineGraph();
   return window;
 }
 

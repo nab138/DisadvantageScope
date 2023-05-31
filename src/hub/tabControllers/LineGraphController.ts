@@ -394,7 +394,7 @@ export default class LineGraphController implements TabController {
   }
 
   /** Adds a new field. */
-  private addField(legend: "left" | "discrete" | "right", key: string, color?: string, show: boolean = true) {
+  addField(legend: "left" | "discrete" | "right", key: string, color?: string, show: boolean = true) {
     // Get color if not provided
     if (color == null) {
       let usedColors: string[] = [];

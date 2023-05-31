@@ -474,6 +474,9 @@ function handleMainMessage(message: NamedMessage) {
     case "open-tab":
       window.tabs.openTabIfNotOpen(message.data);
       break;
+    case "line-graph-display":
+      window.tabs.lineGraphDisplay(message.data);
+      break;
 
     case "move-tab":
       window.tabs.setSelected(window.tabs.getSelectedTab() + message.data);

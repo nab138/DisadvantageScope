@@ -1,3 +1,4 @@
+import { Line } from "three";
 import { TabGroupState } from "../shared/HubState";
 import { ENABLED_KEYS } from "../shared/log/LogUtil";
 import TabType, { getDefaultTabTitle, getTabIcon, TIMELINE_VIZ_TYPES } from "../shared/TabType";
@@ -304,6 +305,15 @@ export default class Tabs {
       this.addTab(type);
     } else {
       this.setSelected(index);
+    }
+  }
+
+  lineGraphDisplay(arr: string[]) {
+    this.openTabIfNotOpen(TabType.LineGraph);
+    let tab = this.tabList[this.getSelectedTab()].controller as LineGraphController;
+    tab.clearAxis("left");
+    for (let val of arr) {
+      tab.addField("left", val);
     }
   }
 
