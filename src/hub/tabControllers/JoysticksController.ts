@@ -5,7 +5,7 @@ import TimelineVizController from "./TimelineVizController";
 
 export default class JoysticksController extends TimelineVizController {
   private CONFIG_IDS: HTMLInputElement[];
-  private CONFIG_LAYOUTS: HTMLInputElement[];
+  CONFIG_LAYOUTS: HTMLInputElement[];
 
   private lastOptions: { [id: string]: any } | null = null;
 

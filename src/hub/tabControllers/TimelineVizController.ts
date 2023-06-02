@@ -19,12 +19,13 @@ export default abstract class TimelineVizController implements TabController {
   private title: string = "";
   private fieldConfig: { element: HTMLElement; types: (LoggableType | "mechanism")[] }[];
   private fields: (string | null)[] = [];
-  private listConfig: { element: HTMLElement; types: (LoggableType | "mechanism")[]; options: string[][] }[];
+  listConfig: { element: HTMLElement; types: (LoggableType | "mechanism")[]; options: string[][] }[];
   private listFields: { type: string; key: string; fieldTypeIndex: number }[][] = [];
   private lastListFieldsStr: string = "";
   private lastAllKeys: string[] = [];
   protected visualizer: Visualizer;
 
+  private oldListConfig: { element: HTMLElement; types: (LoggableType | "mechanism")[]; options: string[][] }[];
   constructor(
     content: HTMLElement,
     type: TabType,
@@ -37,6 +38,7 @@ export default abstract class TimelineVizController implements TabController {
     this.fieldConfig = fieldConfig;
     this.listConfig = listConfig;
     this.visualizer = visualizer;
+    this.oldListConfig = listConfig;
 
     this.TIMELINE_INPUT = content.getElementsByClassName("timeline-viz-timeline-slider")[0] as HTMLInputElement;
     this.TIMELINE_MARKER_CONTAINER = content.getElementsByClassName(
@@ -101,7 +103,7 @@ export default abstract class TimelineVizController implements TabController {
   }
 
   /** Processes a drag event, including updating a field if necessary. */
-  private handleDrag(dragData: any) {
+  handleDrag(dragData: any) {
     if (this.CONTENT.hidden) return;
 
     this.DRAG_HIGHLIGHT.hidden = true;

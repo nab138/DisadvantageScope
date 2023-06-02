@@ -17,16 +17,16 @@ export default class ThreeDimensionController extends TimelineVizController {
   private FIELD: HTMLInputElement;
   private ALLIANCE: HTMLInputElement;
   private FIELD_SOURCE_LINK: HTMLInputElement;
-  private ROBOT: HTMLInputElement;
+  ROBOT: HTMLInputElement;
   private ROBOT_SOURCE_LINK: HTMLInputElement;
   private UNIT_DISTANCE: HTMLInputElement;
-  private UNIT_ROTATION: HTMLInputElement;
+  UNIT_ROTATION: HTMLInputElement;
+  CONTENT: HTMLElement;
 
   private lastOptions: { [id: string]: any } | null = null;
 
   constructor(content: HTMLElement) {
     let configBody = content.getElementsByClassName("timeline-viz-config")[0].firstElementChild as HTMLElement;
-
     super(
       content,
       TabType.ThreeDimension,
@@ -81,6 +81,7 @@ export default class ThreeDimensionController extends TimelineVizController {
         content.getElementsByClassName("three-dimension-alert")[0] as HTMLElement
       )
     );
+    this.CONTENT = content;
 
     // Get option inputs
     this.FIELD = configBody.children[1].children[2].children[1] as HTMLInputElement;
@@ -93,7 +94,6 @@ export default class ThreeDimensionController extends TimelineVizController {
 
     // Set default alliance value
     this.ALLIANCE.value = "blue";
-
     // Bind source links
     this.FIELD.addEventListener("change", () => this.updateFieldRobotOptions());
     this.FIELD_SOURCE_LINK.addEventListener("click", () => {

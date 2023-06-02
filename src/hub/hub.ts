@@ -477,6 +477,12 @@ function handleMainMessage(message: NamedMessage) {
     case "line-graph-display":
       window.tabs.lineGraphDisplay(message.data);
       break;
+    case "joystick-display":
+      window.tabs.joystickDisplay();
+      break;
+    case "three-dimension-robot":
+      window.tabs.threeDimensionRobot(message.data);
+      break;
 
     case "move-tab":
       window.tabs.setSelected(window.tabs.getSelectedTab() + message.data);

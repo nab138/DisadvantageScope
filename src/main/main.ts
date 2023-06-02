@@ -53,7 +53,16 @@ import minimist from "minimist";
 
 const args = minimist(process.argv.slice(2));
 if (args.h || args.help) {
-  console.log("Coming soon");
+  console.log("DisadvantageScope help");
+  console.log(`Args:`);
+  console.log(`"--lineGraphNT/-l" [NT Key] - Add an nt value to the line graph, be sure to preface with NT:/`);
+  console.log(`"--robotNT/-r" [NT Key] - Set the robot with the given nt key, be sure to preface with NT:/`);
+  console.log("In-app usage:");
+  console.log("K - Connect to sim");
+  console.log("1 - Switch to Line Graph Tab");
+  console.log("2 - Switch to 3D Field Tab");
+  console.log("3 - Switch to Joysticks Tab");
+  console.log("Q - Exit the app");
   process.exit();
 }
 
@@ -105,16 +114,35 @@ function handleLineGraph() {
     sendMessage(hubWindows[0], "open-tab", TabType.LineGraph);
   }
 }
+
+function handle3DField() {
+  if (args.r != null || args.robotNT != null) {
+    let key = args.r ?? args.robotNT;
+    let data = {
+      end: true,
+      x: 810,
+      y: 982,
+      data: {
+        fields: [key],
+        children: [`${key}/0`, `${key}/1`, `${key}/2`]
+      }
+    };
+    sendMessage(hubWindows[0], "three-dimension-robot", data);
+  } else {
+    sendMessage(hubWindows[0], "open-tab", TabType.ThreeDimension);
+  }
+}
+
 process.stdin.on("keypress", (chunk, key) => {
   switch (key.name) {
     case "1":
       handleLineGraph();
       break;
     case "2":
-      sendMessage(hubWindows[0], "open-tab", TabType.ThreeDimension);
+      handle3DField();
       break;
     case "3":
-      sendMessage(hubWindows[0], "open-tab", TabType.Joysticks);
+      sendMessage(hubWindows[0], "joystick-display", TabType.Joysticks);
       break;
     case "k":
       sendMessage(hubWindows[0], "start-live", true);
@@ -1385,9 +1413,6 @@ function createHubWindow() {
   let window = new BrowserWindow(prefs);
   hubWindows.push(window);
 
-  // Finish setup
-  window.once("ready-to-show", window.show);
-
   let firstLoad = true;
   let createPorts = () => {
     const { port1, port2 } = new MessageChannelMain();
@@ -1437,6 +1462,7 @@ function createHubWindow() {
 
   window.loadFile(path.join(__dirname, "../www/hub.html"));
   handleLineGraph();
+  handle3DField();
   return window;
 }
 
@@ -1897,17 +1923,6 @@ app.whenReady().then(() => {
   // Create menu and window
   setupMenu();
   let window = createHubWindow();
-
-  // Check for file path given as argument
-  if (app.isPackaged) {
-    if (process.argv.length > 1) {
-      firstOpenPath = process.argv[1];
-    }
-  } else {
-    if (process.argv.length > 2) {
-      firstOpenPath = process.argv[2];
-    }
-  }
 
   // Open file if exists
   if (firstOpenPath != null) {

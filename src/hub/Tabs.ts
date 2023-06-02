@@ -303,6 +303,8 @@ export default class Tabs {
     let index = this.tabList.findIndex((tab) => tab.type == type);
     if (index == -1) {
       this.addTab(type);
+      let index = this.tabList.findIndex((tab) => tab.type == type);
+      this.setSelected(index);
     } else {
       this.setSelected(index);
     }
@@ -315,6 +317,38 @@ export default class Tabs {
     for (let val of arr) {
       tab.addField("left", val);
     }
+  }
+
+  threeDimensionRobot(data: any) {
+    this.openTabIfNotOpen(TabType.ThreeDimension);
+    let tab = this.tabList[this.getSelectedTab()].controller as ThreeDimensionController;
+    let config = Object.values(tab.listConfig)[1];
+    let bounding = config.element.getBoundingClientRect();
+    data.x = (bounding.left + bounding.right) * 0.5;
+    data.y = (bounding.bottom + bounding.top) * 0.5;
+
+    let elem = document.elementFromPoint(data.x, bounding.top + 10) as HTMLElement;
+    if (elem == null) return;
+    var ev = new MouseEvent("contextmenu", {
+      bubbles: true,
+      cancelable: false,
+      view: window,
+      button: 2,
+      buttons: 0,
+      clientX: elem.getBoundingClientRect().x,
+      clientY: elem.getBoundingClientRect().y
+    });
+    elem.dispatchEvent(ev);
+    tab.handleDrag(data);
+
+    tab.ROBOT.value = "Duck Bot";
+    tab.UNIT_ROTATION.value = "degrees";
+  }
+
+  joystickDisplay() {
+    this.openTabIfNotOpen(TabType.Joysticks);
+    let tab = this.tabList[this.getSelectedTab()].controller as JoysticksController;
+    tab.CONFIG_LAYOUTS[0].value = "Xbox Controller (Blue)";
   }
 
   /** Moves the specified tab left or right. */
