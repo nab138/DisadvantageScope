@@ -10,7 +10,8 @@ If for some weird reason you want to use this, it is fully usable. Clone it, run
 
 - `--lineGraphNT`/`-l` [NT Key] - Add an nt value to the line graph, be sure to preface with NT:/
 - `--robotNT`/`-r` [NT Key] - Set the robot with the given nt key, be sure to preface with NT:/
-  In-app usage:
+
+## In-app usage:
 - K - Connect to sim
 - 1 - Switch to Line Graph Tab
 - 2 - Switch to 3D Field Tab
